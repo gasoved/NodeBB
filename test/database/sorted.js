@@ -1377,6 +1377,14 @@ describe('Sorted Set methods', () => {
 		});
 	});
 
+	describe('getSortedSetDiff', () => {
+
+	});
+
+	describe('sortedSetDiffCard', () => {
+
+	});
+
 	describe('getSortedSetRangeByLex', () => {
 		it('should return an array of all values', (done) => {
 			db.getSortedSetRangeByLex('sortedSetLex', '-', '+', (err, data) => {

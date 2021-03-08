@@ -13,6 +13,7 @@ const batch = require('../batch');
 module.exports = function (Topics) {
 	Topics.delete = async function (tid, uid) {
 		await Promise.all([
+			db.sortedSetAdd('topics:deleted', Date.now(), tid),
 			Topics.setTopicFields(tid, {
 				deleted: 1,
 				deleterUid: uid,
@@ -53,6 +54,7 @@ module.exports = function (Topics) {
 			'deleterUid', 'deletedTimestamp',
 		]);
 		await Promise.all([
+			db.sortedSetRemove('topics:deleted', tid),
 			Topics.setTopicField(tid, 'deleted', 0),
 			addTopicPidsToCid(tid),
 		]);
@@ -90,6 +92,7 @@ module.exports = function (Topics) {
 				`tid:${tid}:posters`,
 			]),
 			db.sortedSetsRemove([
+				'topics:deleted',
 				'topics:tid',
 				'topics:recent',
 				'topics:posts',

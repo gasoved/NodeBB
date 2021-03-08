@@ -9,6 +9,7 @@ module.exports = function (module) {
 	require('./sorted/remove')(module);
 	require('./sorted/union')(module);
 	require('./sorted/intersect')(module);
+	require('./sorted/diff')(module);
 
 	module.getSortedSetRange = async function (key, start, stop) {
 		return await sortedSetRange('zrange', key, start, stop, '-inf', '+inf', false);

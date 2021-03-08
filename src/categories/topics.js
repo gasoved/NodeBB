@@ -63,7 +63,11 @@ module.exports = function (Categories) {
 		const stop = data.stop === -1 ? data.stop : start + normalTidsToGet - 1;
 		let normalTids;
 		const reverse = direction === 'highest-to-lowest';
-		if (Array.isArray(set)) {
+		const FSDIMS = 1615174542164; // admin user joindate
+		const isAdmin = await user.isAdministrator(data.uid);
+		if (!isAdmin) {
+			normalTids = await db[reverse ? 'getSortedSetRevDiff' : 'getSortedSetDiff']({ sets: set, diffSets: ['topics:deleted'], remStop: FSDIMS, start, stop });
+		} else if (Array.isArray(set)) {
 			const weights = set.map((s, index) => (index ? 0 : 1));
 			normalTids = await db[reverse ? 'getSortedSetRevIntersect' : 'getSortedSetIntersect']({ sets: set, start: start, stop: stop, weights: weights });
 		} else {
